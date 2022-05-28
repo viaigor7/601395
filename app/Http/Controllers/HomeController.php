@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Car;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $cars = $this->cars();
+
+        return view('home', ['cars' => $cars]);
+    }
+
+    protected function cars(){
+        return Car::all();
     }
 }

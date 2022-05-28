@@ -1,0 +1,58 @@
+#ext-megabonus-main-content {
+    display: none;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background: #1a202c;
+}
+
+.container {
+    display: block;
+}
+
+#app .container .navbar-brand {
+    text-decoration: none;
+    color: #fff;
+    font-size: 22px;
+    margin: 21px;
+    padding: 10px;
+    display: block;
+    float: left;
+    width: 50%;
+}
+
+#navbarSupportedContent {
+    float: right;
+    display: block;
+    width: 46%;
+}
+
+#navbarSupportedContent ul {
+    text-align: right;
+}
+
+#navbarSupportedContent ul a {
+    text-decoration: none;
+    color: #fff;
+    padding: 15px;
+    margin: 18px;
+    width: 24px;
+    display: block;
+    float: right;
+}
+
+.py-4 {
+    display: flex;
+    width: 100%;
+}
+
+.py-4 .container {
+    margin: 0 auto;
+}
+
+.justify-content-center {
+    background: #fff;
+    padding: 19px;
+    border-radius: 10px;
+}
