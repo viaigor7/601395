@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ url('addpost') }}">
+                    <form method="POST" action="{{ url('home') }}">
                         @csrf
 
                         <div class="row mb-3">
@@ -72,9 +72,9 @@
                     <table>
                     <thead>
                       <tr>
-                        <th>{{ __('Name Car') }}</th>
-                        <th>{{ __('Model Car') }}</th>
-                        <th>{{ __('Year Car') }}</th>
+                        <th><a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a></th>
+                        <th><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a><</th>
+                        <th><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a><</th>
                         </tr>
                       </thead>
                       <tbody>

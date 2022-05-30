@@ -17,11 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('addpost', function () {
-    return 'Hello World';
-});
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
+if(isset($_POST['name']) && isset($_POST['model']) && isset($_POST['year'])){
+    Route::post('/home', [App\Http\Controllers\HomeController::class, 'create'])->name('home');
+} else {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+}
