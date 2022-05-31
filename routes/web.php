@@ -20,8 +20,5 @@ Route::get('/', function () {
 
 Auth::routes();
 
-if(isset($_POST['name']) && isset($_POST['model']) && isset($_POST['year'])){
-    Route::post('/home', [App\Http\Controllers\HomeController::class, 'create'])->name('home');
-} else {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-}
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home', [App\Http\Controllers\HomeController::class, 'create'])->name('home');

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Add Car') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -69,12 +69,12 @@
                             </div>
                         </div>
                     </form>
-                    <table>
+                    <table class="table">
                     <thead>
                       <tr>
-                        <th><a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a></th>
-                        <th><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a><</th>
-                        <th><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a><</th>
+                        <th scope="col"><a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a></th>
+                        <th scope="col"><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a></th>
+                        <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a></th>
                         </tr>
                       </thead>
                       <tbody>

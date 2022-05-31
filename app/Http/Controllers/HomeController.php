@@ -36,38 +36,24 @@ class HomeController extends Controller
 
         $cars = $this->cars();
         $urls = $this->url();
-        $urls = $this->url();
 
         return view('home', ['cars' => $cars, 'error' => $error, 'urls' => $urls]);
     }
 
     public function create()
     {
-        $error = [
-            'name' => '',
-            'model' => '',
-            'year' => ''
-        ];
+        $car = request()->validate([
+            'name' => 'string',
+            'model' => 'string',
+            'year' => 'integer'
+        ]);
 
-        if(isset($_POST['name']) && isset($_POST['model']) && isset($_POST['year'])){
-            if($_POST['name'] != '' && $_POST['model'] != '' && $_POST['year'] != ''){
-                Car::create([
-                    'name' => $_POST['name'],
-                    'model' => $_POST['model'],
-                    'year' => $_POST['year']
-                ]);
-            } else {
-                $error = [
-                    'name' => $_POST['name'],
-                    'model' => $_POST['model'],
-                    'year' => $_POST['year']
-                ];
-            }
-        }
+        Car::create($car);
 
         $cars = $this->cars();
+        $urls = $this->url();
 
-        return view('home', ['cars' => $cars, 'error' => $error]);
+        return view('home', ['cars' => $cars, 'urls' => $urls]);
     }
 
     private function cars(){
