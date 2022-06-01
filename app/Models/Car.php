@@ -11,4 +11,8 @@ class Car extends Model
 
     protected $table = 'cars';
     protected $guarded = [];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }

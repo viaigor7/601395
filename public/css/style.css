@@ -1,0 +1,7 @@
+.car, .category {
+    display: none;
+}
+
+.car.action, .category.action {
+    display: block;
+}

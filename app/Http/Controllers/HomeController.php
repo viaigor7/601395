@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Car;
+use App\Models\Category;
 
 class HomeController extends Controller
 {
@@ -24,20 +25,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $error = [
-            'name' => '',
-            'model' => '',
-            'year' => ''
-        ];
-
-        // if($_GET()){
-        //    $this->cars_filter();
-        // }
-
+        $categories = $this->categories();
         $cars = $this->cars();
         $urls = $this->url();
 
-        return view('home', ['cars' => $cars, 'error' => $error, 'urls' => $urls]);
+        return view('home', ['cars' => $cars, 'urls' => $urls, 'categories' => $categories]);
     }
 
     public function create()
@@ -45,23 +37,25 @@ class HomeController extends Controller
         $car = request()->validate([
             'name' => 'string',
             'model' => 'string',
-            'year' => 'integer'
+            'year' => 'integer',
+            'category_id' => 'integer'
         ]);
 
         Car::create($car);
 
-        $cars = $this->cars();
-        $urls = $this->url();
-
-        return view('home', ['cars' => $cars, 'urls' => $urls]);
+        return redirect()->route('home');
     }
 
     private function cars(){
         if($this->cars_filter()){
             return $this->cars_filter();
         } else {
-            return Car::all();
+            return Car::with('category')->get();;
         }
+    }
+
+    private function categories(){
+        return Category::all();
     }
 
     private function cars_filter(){
