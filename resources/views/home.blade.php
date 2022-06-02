@@ -99,6 +99,7 @@
                         <th scope="col"><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a></th>
                         <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a></th>
                         <th scope="col">{{ __('Category') }}</th>
+                        <th scope="col">{{ __('Options') }}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -108,6 +109,12 @@
                         <th>{{ $car->model }}</th>
                         <th>{{ $car->year }}</th>
                         <th>@if (isset($car->category->name)) {{ $car->category->name }} @endif</th>
+                        <th>
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-primary">Edit</a>
+                                <a href="#" class="btn btn-danger">Delete</a>
+                            </div>
+                        </th>
                         </tr>
                         @endforeach
                       </tbody>

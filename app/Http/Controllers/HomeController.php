@@ -33,7 +33,6 @@ class HomeController extends Controller
         $drivers = $this->drivers();
         $cars = $this->cars();
         $urls = $this->url();
-        dd($cars);
 
         return view('home', ['cars' => $cars, 'urls' => $urls, 'categories' => $categories, 'drivers' => $drivers]);
     }
