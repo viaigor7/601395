@@ -22,3 +22,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/home', [App\Http\Controllers\HomeController::class, 'create'])->name('home');
+Route::post('/home/categiry', [App\Http\Controllers\HomeController::class, 'createCategiry'])->name('categiry');

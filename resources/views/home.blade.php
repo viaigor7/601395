@@ -55,8 +55,8 @@
                             <label for="category" class="col-md-4 col-form-label text-md-end">{{ __('Year Category') }}</label>
 
                             <div class="col-md-6">
-                                <select class="form-select" id="category" aria-label="Default select example" name="category_id">
-                                    <option selected>Open this select menu</option>
+                                <select class="form-select" id="category" aria-label="Default select example" name="category_id" required>
+                                    <option selected>Select a category</option>
                                     @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
@@ -78,7 +78,7 @@
                         <th scope="col"><a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a></th>
                         <th scope="col"><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a></th>
                         <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a></th>
-                        <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Category') }}</a></th>
+                        <th scope="col">{{ __('Category') }}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -94,45 +94,14 @@
                     </table>
                     </div>
                     <div class="category">
-                    <form method="POST" action="{{ url('home') }}">
+                    <form method="POST" action="{{ route('categiry') }}">
                         @csrf
 
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name Car') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name Category') }}</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('email') is-invalid @enderror" name="name" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="model" class="col-md-4 col-form-label text-md-end">{{ __('Model Car') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="model" type="text" class="form-control @error('password') is-invalid @enderror" name="model" required autocomplete="current-password">
-                            </div>
-                        </div>
-
-                        
-
-                        <div class="row mb-3">
-                            <label for="year" class="col-md-4 col-form-label text-md-end">{{ __('Year Car') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="year" type="number" class="form-control @error('password') is-invalid @enderror" name="year" required autocomplete="current-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="category" class="col-md-4 col-form-label text-md-end">{{ __('Year Category') }}</label>
-
-                            <div class="col-md-6">
-                                <select class="form-select" id="category" aria-label="Default select example" name="category_id">
-                                    <option selected>Open this select menu</option>
-                                    @foreach($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
 
@@ -147,19 +116,13 @@
                     <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col"><a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a></th>
-                        <th scope="col"><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a></th>
-                        <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a></th>
-                        <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Category') }}</a></th>
+                        <th scope="col">{{ __('Name Category') }}</th>
                         </tr>
                       </thead>
                       <tbody>
-                        @foreach ($cars as $car)
+                        @foreach($categories as $category)
                         <tr>
-                        <th>{{ $car->name }}</th>
-                        <th>{{ $car->model }}</th>
-                        <th>{{ $car->year }}</th>
-                        <th>@if (isset($car->category->name)) {{ $car->category->name }} @endif</th>
+                        <th>{{ $category->name }}</th>
                         </tr>
                         @endforeach
                       </tbody>
@@ -173,6 +136,7 @@
 <script type="text/javascript">
     let radios = document.querySelectorAll('input[name="add"]');
     let div = document.querySelector('div.car');
+
     function clic(){
         let radioChet;
 

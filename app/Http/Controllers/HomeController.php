@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use App\Models\Car;
 use App\Models\Category;
 
@@ -46,6 +48,17 @@ class HomeController extends Controller
         return redirect()->route('home');
     }
 
+    public function createCategiry()
+    {
+        $category = request()->validate([
+            'name' => 'string',
+        ]);
+
+        Category::create($category);
+
+        return redirect()->route('home');
+    }
+
     private function cars(){
         if($this->cars_filter()){
             return $this->cars_filter();
@@ -76,6 +89,7 @@ class HomeController extends Controller
         $urls = [
             'name' => route('home', ['name' => (isset($_GET['name'])) && $_GET['name'] == 'desc' ? 'asc' : 'desc']),
             'model' => route('home', ['model' => (isset($_GET['model'])) && $_GET['model'] == 'desc' ? 'asc' : 'desc']),
+            'category' => route('home', ['category' => (isset($_GET['category'])) && $_GET['category'] == 'desc' ? 'asc' : 'desc']),
             'year' => route('home', ['year' => (isset($_GET['year'])) && $_GET['year'] == 'desc' ? 'asc' : 'desc'])
         ];
         
