@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use App\Models\Car;
 use App\Models\Category;
+use App\Models\Driver;
+use App\Models\CarDriver;
 
 class HomeController extends Controller
 {
@@ -28,22 +30,31 @@ class HomeController extends Controller
     public function index()
     {
         $categories = $this->categories();
+        $drivers = $this->drivers();
         $cars = $this->cars();
         $urls = $this->url();
+        dd($cars);
 
-        return view('home', ['cars' => $cars, 'urls' => $urls, 'categories' => $categories]);
+        return view('home', ['cars' => $cars, 'urls' => $urls, 'categories' => $categories, 'drivers' => $drivers]);
     }
 
     public function create()
     {
-        $car = request()->validate([
+        $cars = request()->validate([
             'name' => 'string',
             'model' => 'string',
             'year' => 'integer',
-            'category_id' => 'integer'
+            'category_id' => 'integer',
+            'drivers' => 'array'
         ]);
 
-        Car::create($car);
+        $drivers = $cars['drivers'];
+
+        unset($cars['drivers']);
+
+        $car = Car::create($cars);
+
+        $car->drivers()->attach($drivers);
 
         return redirect()->route('home');
     }
@@ -59,6 +70,24 @@ class HomeController extends Controller
         return redirect()->route('home');
     }
 
+    public function createDriver()
+    {
+        $driver = request()->validate([
+            'name' => 'string',
+            'cars' => 'array'
+        ]);
+
+        $cars = $driver['cars'];
+
+        unset($driver['cars']);
+
+        $drivers = Driver::create($driver);
+
+        $drivers->cars()->attach($cars);
+
+        return redirect()->route('home');
+    }
+
     private function cars(){
         if($this->cars_filter()){
             return $this->cars_filter();
@@ -69,6 +98,10 @@ class HomeController extends Controller
 
     private function categories(){
         return Category::all();
+    }
+
+    private function drivers() {
+        return Driver::all();
     }
 
     private function cars_filter(){

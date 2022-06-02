@@ -1,7 +1,7 @@
-.car, .category {
+.car, .category, .driver {
     display: none;
 }
 
-.car.action, .category.action {
+.car.action, .category.action, .driver.action {
     display: block;
 }

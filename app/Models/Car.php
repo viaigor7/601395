@@ -15,4 +15,8 @@ class Car extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
+    public function drivers(){
+        return $this->belongsToMany(Driver::class, 'car_drivers', 'car_id', 'driver_id');
+    }
 }

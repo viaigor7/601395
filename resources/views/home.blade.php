@@ -12,6 +12,9 @@
 
                         <input type="radio" class="btn-check" name="add" id="btnradio2" autocomplete="off" onclick="clic()" value="category">
                         <label class="btn btn-outline-primary" for="btnradio2">{{ __('Add Category') }}</label>
+
+                        <input type="radio" class="btn-check" name="add" id="btnradio3" autocomplete="off" onclick="clic()" value="driver">
+                        <label class="btn btn-outline-primary" for="btnradio3">{{ __('Add Driver') }}</label>
                     </div>
                 </div>
 
@@ -61,6 +64,23 @@
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="driver" class="col-md-4 col-form-label text-md-end">{{ __('Year Drivers') }}</label>
+
+                            <div class="col-md-6">
+                                <div class="bd-example-snippet bd-code-snippet">
+                                    <div class="bd-example">
+                                        @foreach($drivers as $driver)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="dirver{{ $driver->id }}" name="drivers[]" value="{{ $driver->id }}">
+                                            <label class="form-check-label" for="dirver{{ $driver->id }}">{{ $driver->name }}</label>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -123,6 +143,58 @@
                         @foreach($categories as $category)
                         <tr>
                         <th>{{ $category->name }}</th>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                    </div>
+                    <div class="driver">
+                    <form method="POST" action="{{ route('driver') }}">
+                        @csrf
+
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name Driver') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="name" type="text" class="form-control @error('email') is-invalid @enderror" name="name" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="driver" class="col-md-4 col-form-label text-md-end">{{ __('Year Cars') }}</label>
+
+                            <div class="col-md-6">
+                                <div class="bd-example-snippet bd-code-snippet">
+                                    <div class="bd-example">
+                                        @foreach($cars as $car)
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="dirver{{ $car->id }}" name="cars[]" value="{{ $car->id }}">
+                                            <label class="form-check-label" for="dirver{{ $car->id }}">{{ $car->name }}</label>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Submit') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">{{ __('Name Driver') }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($drivers as $driver)
+                        <tr>
+                        <th>{{ $driver->name }}</th>
                         </tr>
                         @endforeach
                       </tbody>
