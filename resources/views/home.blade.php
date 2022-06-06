@@ -32,7 +32,12 @@
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name Car') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('email') is-invalid @enderror" name="name" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -40,7 +45,12 @@
                             <label for="model" class="col-md-4 col-form-label text-md-end">{{ __('Model Car') }}</label>
 
                             <div class="col-md-6">
-                                <input id="model" type="text" class="form-control @error('password') is-invalid @enderror" name="model" required autocomplete="current-password">
+                                <input id="model" type="text" class="form-control @error('model') is-invalid @enderror" name="model" value="{{ old('model') }}" required autocomplete="model">
+                                @error('model')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -50,7 +60,12 @@
                             <label for="year" class="col-md-4 col-form-label text-md-end">{{ __('Year Car') }}</label>
 
                             <div class="col-md-6">
-                                <input id="year" type="number" class="form-control @error('password') is-invalid @enderror" name="year" required autocomplete="current-password">
+                                <input id="year" type="number" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ old('year') }}" required autocomplete="year">
+                                @error('year')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -58,12 +73,17 @@
                             <label for="category" class="col-md-4 col-form-label text-md-end">{{ __('Year Category') }}</label>
 
                             <div class="col-md-6">
-                                <select class="form-select" id="category" aria-label="Default select example" name="category_id" required>
+                                <select class="form-select @error('category_id') is-invalid @enderror" id="category" aria-label="Default select example" name="category_id" required>
                                     <option selected>Select a category</option>
                                     @foreach($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
+                                @error('category_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -72,14 +92,27 @@
 
                             <div class="col-md-6">
                                 <div class="bd-example-snippet bd-code-snippet">
-                                    <div class="bd-example">
+                                    <div class="bd-example @error('drivers') is-invalid @enderror">
                                         @foreach($drivers as $driver)
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="dirver{{ $driver->id }}" name="drivers[]" value="{{ $driver->id }}">
+                                            <input class="form-check-input" type="checkbox" id="dirver{{ $driver->id }}" name="drivers[]" value="{{ $driver->id }}"
+                                            @if(old('drivers')))
+                                            @foreach(old('drivers') as $carDriver)
+                                            {{ $driver->id == $carDriver ? 'checked' : '' }}
+                                            @endforeach
+                                            @endif
+                                            >
                                             <label class="form-check-label" for="dirver{{ $driver->id }}">{{ $driver->name }}</label>
                                         </div>
                                         @endforeach
                                     </div>
+                                    
+                                    @error('drivers')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}
+                                            </strong>
+                                    </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -111,8 +144,12 @@
                         <th>@if (isset($car->category->name)) {{ $car->category->name }} @endif</th>
                         <th>
                             <div class="btn-group">
-                                <a href="#" class="btn btn-primary">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <a href="{{ route('car.edit', $car->id) }}" class="btn btn-primary">Edit</a>
+                                <form role="form" action="{{ route('car.delete', $car->id) }}" method="post" enctype="multipart/form">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                </form>
                             </div>
                         </th>
                         </tr>
@@ -144,12 +181,23 @@
                     <thead>
                       <tr>
                         <th scope="col">{{ __('Name Category') }}</th>
+                        <th scope="col">{{ __('Options') }}</th>
                         </tr>
                       </thead>
                       <tbody>
                         @foreach($categories as $category)
                         <tr>
                         <th>{{ $category->name }}</th>
+                        <th>
+                            <div class="btn-group">
+                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-primary">Edit</a>
+                                <form role="form" action="{{ route('category.delete', $category->id) }}" method="post" enctype="multipart/form">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                </form>
+                            </div>
+                        </th>
                         </tr>
                         @endforeach
                       </tbody>
@@ -196,12 +244,23 @@
                     <thead>
                       <tr>
                         <th scope="col">{{ __('Name Driver') }}</th>
+                        <th scope="col">{{ __('Options') }}</th>
                         </tr>
                       </thead>
                       <tbody>
                         @foreach($drivers as $driver)
                         <tr>
                         <th>{{ $driver->name }}</th>
+                        <th>
+                            <div class="btn-group">
+                                <a href="{{ route('driver.edit', $driver->id) }}" class="btn btn-primary">Edit</a>
+                                <form role="form" action="{{ route('driver.delete', $driver->id) }}" method="post" enctype="multipart/form">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="submit" value="Delete" class="btn btn-danger">
+                                </form>
+                            </div>
+                        </th>
                         </tr>
                         @endforeach
                       </tbody>
