@@ -13,6 +13,6 @@ class Driver extends Model
     protected $guarded = [];
 
     public function cars(){
-        return $this->belongsToMany(Driver::class, 'car_drivers', 'driver_id', 'car_id');
+        return $this->belongsToMany(Car::class, 'car_drivers', 'driver_id', 'car_id');
     }
 }

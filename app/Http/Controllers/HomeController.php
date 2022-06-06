@@ -44,7 +44,7 @@ class HomeController extends Controller
             'model' => 'string',
             'year' => 'integer',
             'category_id' => 'integer',
-            'drivers' => 'array'
+            'drivers' => 'required|array'
         ]);
 
         $drivers = $cars['drivers'];
