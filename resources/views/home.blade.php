@@ -24,6 +24,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
+
                     <div class="car action">
                     <form method="POST" action="{{ url('home') }}">
                         @csrf
@@ -145,11 +146,13 @@
                         <th>
                             <div class="btn-group">
                                 <a href="{{ route('car.edit', $car->id) }}" class="btn btn-primary">Edit</a>
+                                {{-- @if($car->drivers_count == 0) --}}
                                 <form role="form" action="{{ route('car.delete', $car->id) }}" method="post" enctype="multipart/form">
                                     @csrf
                                     @method('delete')
                                     <input type="submit" value="Delete" class="btn btn-danger">
                                 </form>
+                                {{-- @endif --}}
                             </div>
                         </th>
                         </tr>

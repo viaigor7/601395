@@ -17,10 +17,11 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name', 50);
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table('cars', function (Blueprint $table) {
-            $table->foreign('category_id', 'car_category_fk')->on('categories')->references('id');
+            $table->foreign('category_id', 'car_category_fk')->on('categories')->references('id')->cascadeOnDelete();
         });
     }
 

@@ -44,16 +44,20 @@ class HomeController extends Controller
             'model' => 'string',
             'year' => 'integer',
             'category_id' => 'integer',
-            'drivers' => 'required|array'
+            'drivers' => 'array'
         ]);
 
-        $drivers = $cars['drivers'];
+        if(isset($cars['drivers'])){
+            $drivers = $cars['drivers'];
 
-        unset($cars['drivers']);
+            unset($cars['drivers']);
+        }
 
         $car = Car::create($cars);
 
-        $car->drivers()->attach($drivers);
+        if(isset($drivers)){
+            $car->drivers()->attach($drivers);
+        }
 
         return redirect()->route('home');
     }
@@ -76,13 +80,17 @@ class HomeController extends Controller
             'cars' => 'array'
         ]);
 
-        $cars = $driver['cars'];
+        if(isset($driver['cars'])){
+            $cars = $driver['cars'];
 
-        unset($driver['cars']);
+            unset($driver['cars']);
+        }
 
         $drivers = Driver::create($driver);
 
-        $drivers->cars()->attach($cars);
+        if(isset($cars)){
+            $drivers->cars()->attach($cars);
+        }
 
         return redirect()->route('home');
     }
@@ -91,7 +99,7 @@ class HomeController extends Controller
         if($this->cars_filter()){
             return $this->cars_filter();
         } else {
-            return Car::with('category')->get();;
+            return Car::withCount('drivers')->with('category')->get();;
         }
     }
 
@@ -107,11 +115,11 @@ class HomeController extends Controller
         $cars = [];
 
         if(isset($_GET['name'])){
-            $cars = Car::orderBy('name', $_GET['name'])->get();
+            $cars = Car::withCount('drivers')->orderBy('name', $_GET['name'])->get();
         } else if (isset($_GET['model'])){
-            $cars = Car::orderBy('model', $_GET['model'])->get();
+            $cars = Car::withCount('drivers')->orderBy('model', $_GET['model'])->get();
         } else if (isset($_GET['year'])){
-            $cars = Car::orderBy('year', $_GET['year'])->get();
+            $cars = Car::withCount('drivers')->orderBy('year', $_GET['year'])->get();
         }
 
         return $cars;

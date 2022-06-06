@@ -19,9 +19,10 @@ class CreateCarDriversTable extends Migration
             $table->unsignedBigInteger('driver_id');
             $table->index('car_id', 'car_driver_car_idx');
             $table->index('driver_id', 'car_driver_driver_idx');
+            $table->softDeletes();
 
-            $table->foreign('car_id', 'car_driver_car_fk')->on('cars')->references('id');
-            $table->foreign('driver_id', 'car_driver_driver_fk')->on('drivers')->references('id');
+            $table->foreign('car_id', 'car_driver_car_fk')->on('cars')->references('id')->cascadeOnDelete();
+            $table->foreign('driver_id', 'car_driver_driver_fk')->on('drivers')->references('id')->cascadeOnDelete();
         });
     }
 

@@ -27,25 +27,26 @@ class CarController extends Controller
             'model' => 'string',
             'year' => 'integer',
             'category_id' => 'integer',
-            'drivers' => 'required|array'
+            'drivers' => 'array'
         ]);
 
-        $drivers = $cars['drivers'];
+        if(isset($cars['drivers'])){
+            $drivers = $cars['drivers'];
 
-        unset($cars['drivers']);
+            unset($cars['drivers']);
+        }
 
         $car->update($cars);
 
-        $car->drivers()->sync($drivers);
+        if(isset($drivers)){
+            $car->drivers()->sync($drivers);
+        }
 
         return redirect()->route('home');
     }
 
     public function destroy(Car $car){
-
-    Car::delete( $car );
-  
-        //$car->delete();
+        $car->delete();
 
         return redirect()->route('home');
     }
@@ -79,16 +80,20 @@ class CarController extends Controller
     public function driverUpdate(Driver $driver){
         $drivers = request()->validate([
             'name' => 'string',
-            'cars' => 'required|array'
+            'cars' => 'array'
         ]);
 
-        $cars = $drivers['cars'];
+        if($drivers['cars']){
+            $cars = $drivers['cars'];
 
-        unset($drivers['cars']);
+            unset($drivers['cars']);
+        }
 
         $driver->update($drivers);
 
-        $driver->cars()->sync($cars);
+        if(isset($cars)){
+            $driver->cars()->sync($cars);
+        }
 
         return redirect()->route('home');
     }
