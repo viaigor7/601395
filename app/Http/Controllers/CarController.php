@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Car;
 use App\Models\Category;
 use App\Models\Driver;
+use App\Http\Requests\CarRequest;
 
 class CarController extends Controller
 {
@@ -21,14 +22,8 @@ class CarController extends Controller
         return view('car.edit', compact('car', 'drivers', 'categories'));
     }
 
-    public function update(Car $car){
-        $cars = request()->validate([
-            'name' => 'string',
-            'model' => 'string',
-            'year' => 'integer',
-            'category_id' => 'integer',
-            'drivers' => 'array'
-        ]);
+    public function update(CarRequest $request, Car $car){
+        $cars = $request->validated();
 
         if(isset($cars['drivers'])){
             $drivers = $cars['drivers'];

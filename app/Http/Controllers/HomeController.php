@@ -9,6 +9,7 @@ use App\Models\Car;
 use App\Models\Category;
 use App\Models\Driver;
 use App\Models\CarDriver;
+use App\Http\Requests\CarRequest;
 
 class HomeController extends Controller
 {
@@ -37,15 +38,9 @@ class HomeController extends Controller
         return view('home', ['cars' => $cars, 'urls' => $urls, 'categories' => $categories, 'drivers' => $drivers]);
     }
 
-    public function create()
+    public function create(CarRequest $request)
     {
-        $cars = request()->validate([
-            'name' => 'string',
-            'model' => 'string',
-            'year' => 'integer',
-            'category_id' => 'integer',
-            'drivers' => 'array'
-        ]);
+        $cars = $request->validated();
 
         if(isset($cars['drivers'])){
             $drivers = $cars['drivers'];

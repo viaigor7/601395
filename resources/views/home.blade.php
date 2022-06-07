@@ -129,7 +129,12 @@
                     <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col"><a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a></th>
+                        <th scope="col">
+                            <a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a>
+                            <form method="get" action="{{ route('home') }}">
+                                <input type="text" name="car_name">
+                            </form>
+                        </th>
                         <th scope="col"><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a></th>
                         <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a></th>
                         <th scope="col">{{ __('Category') }}</th>
