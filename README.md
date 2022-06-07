@@ -25,3 +25,13 @@ Creating tables in the database
 ```bash
 php artisan migrate
 ```
+
+Generating records in the database
+```bash
+php artisan migrate:fresh --seed
+```
+
+or
+```bash
+php artisan migrate:fresh --seed
+```

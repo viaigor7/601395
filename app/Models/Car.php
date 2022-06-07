@@ -10,7 +10,7 @@ class Car extends Model
     use HasFactory;
 
     protected $table = 'cars';
-    protected $guarded = [];
+    protected $guarded = false;
 
     public function category(){
         return $this->belongsTo(Category::class);
