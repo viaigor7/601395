@@ -28,7 +28,7 @@ php artisan migrate
 
 Generating records in the database
 ```bash
-php artisan migrate:fresh --seed
+php artisan migrate --seed
 ```
 
 or
