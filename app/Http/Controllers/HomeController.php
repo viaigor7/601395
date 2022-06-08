@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\CarFilter;
+use App\Http\Requests\FilterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -28,14 +30,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(FilterRequest $request)
     {
         $categories = $this->categories();
         $drivers = $this->drivers();
-        $cars = $this->cars();
+        $cars = $this->cars($request);
         $urls = $this->url();
+        $dataGet = $request->validated();
 
-        return view('home', ['cars' => $cars, 'urls' => $urls, 'categories' => $categories, 'drivers' => $drivers]);
+        return view('home', ['cars' => $cars, 'urls' => $urls, 'categories' => $categories, 'drivers' => $drivers, 'dataGet' => $dataGet]);
     }
 
     public function create(CarRequest $request)
@@ -90,12 +93,43 @@ class HomeController extends Controller
         return redirect()->route('home');
     }
 
-    private function cars(){
-        if($this->cars_filter()){
-            return $this->cars_filter();
+    private function cars($request){
+        if($this->cars_filter($request)){
+            return $this->cars_filter($request);
         } else {
-            return Car::withCount('drivers')->with('category')->get();;
+            return Car::withCount('drivers')->with('category')->paginate(10);
         }
+    }
+
+    private function cars_filter($request){
+        $cars = [];
+
+        $data = $request->validated();
+
+        if(!empty($data) || isset($_GET['orderName']) || isset($_GET['orderModel']) || isset($_GET['orderYear'])) {
+            $query = Car::query()->withCount('drivers');
+
+            if(isset($data['name'])){
+                $query->where('name', 'like','%'.$data['name'].'%');
+            }
+            if(isset($data['model'])){
+                $query->where('model', 'like','%'.$data['model'].'%');
+            }
+            if(isset($data['year'])){
+                $query->where('year', 'like','%'.$data['year'].'%');
+            }
+            $cars = $query->paginate(10);
+
+            if (isset($_GET['orderName'])) {
+                $cars = Car::withCount('drivers')->orderBy('name', $_GET['orderName'])->get();
+            } else if (isset($_GET['orderModel'])) {
+                $cars = Car::withCount('drivers')->orderBy('model', $_GET['orderModel'])->get();
+            } else if (isset($_GET['orderYear'])) {
+                $cars = Car::withCount('drivers')->orderBy('year', $_GET['orderYear'])->get();
+            }
+        }
+
+        return $cars;
     }
 
     private function categories(){
@@ -106,28 +140,14 @@ class HomeController extends Controller
         return Driver::all();
     }
 
-    private function cars_filter(){
-        $cars = [];
-
-        if(isset($_GET['name'])){
-            $cars = Car::withCount('drivers')->orderBy('name', $_GET['name'])->get();
-        } else if (isset($_GET['model'])){
-            $cars = Car::withCount('drivers')->orderBy('model', $_GET['model'])->get();
-        } else if (isset($_GET['year'])){
-            $cars = Car::withCount('drivers')->orderBy('year', $_GET['year'])->get();
-        }
-
-        return $cars;
-    }
-
     private function url(){
         $urls = [
-            'name' => route('home', ['name' => (isset($_GET['name'])) && $_GET['name'] == 'desc' ? 'asc' : 'desc']),
-            'model' => route('home', ['model' => (isset($_GET['model'])) && $_GET['model'] == 'desc' ? 'asc' : 'desc']),
+            'orderName' => route('home', ['orderName' => (isset($_GET['orderName'])) && $_GET['orderName'] == 'desc' ? 'asc' : 'desc']),
+            'orderModel' => route('home', ['orderModel' => (isset($_GET['orderModel'])) && $_GET['orderModel'] == 'desc' ? 'asc' : 'desc']),
             'category' => route('home', ['category' => (isset($_GET['category'])) && $_GET['category'] == 'desc' ? 'asc' : 'desc']),
-            'year' => route('home', ['year' => (isset($_GET['year'])) && $_GET['year'] == 'desc' ? 'asc' : 'desc'])
+            'orderYear' => route('home', ['orderYear' => (isset($_GET['orderYear'])) && $_GET['orderYear'] == 'desc' ? 'asc' : 'desc'])
         ];
-        
+
         return $urls;
     }
 }

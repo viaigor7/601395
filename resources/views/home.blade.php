@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        
+
 
                         <div class="row mb-3">
                             <label for="year" class="col-md-4 col-form-label text-md-end">{{ __('Year Car') }}</label>
@@ -107,7 +107,7 @@
                                         </div>
                                         @endforeach
                                     </div>
-                                    
+
                                     @error('drivers')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}
@@ -130,15 +130,36 @@
                     <thead>
                       <tr>
                         <th scope="col">
-                            <a href="{{ $urls['name'] }}">{{ __('Name Car') }}</a>
-                            <form method="get" action="{{ route('home') }}">
-                                <input type="text" name="car_name">
+                            <a href="{{ $urls['orderName'] }}">{{ __('Name Car') }}</a>
+                            <form method="get" action="{{ route('home', $dataGet) }}">
+                                <input type="text" name="name" value="@if(isset($dataGet['name'])){{ $dataGet['name'] }}@endif">
                             </form>
                         </th>
-                        <th scope="col"><a href="{{ $urls['model'] }}">{{ __('Model Car') }}</a></th>
-                        <th scope="col"><a href="{{ $urls['year'] }}">{{ __('Year Car') }}</a></th>
+                        <th scope="col">
+                            <a href="{{ $urls['orderModel'] }}">{{ __('Model Car') }}</a>
+                            <form method="get" action="{{ route('home', $dataGet) }}">
+                                <input type="text" name="model" value="@if(isset($dataGet['model'])){{ $dataGet['model'] }}@endif">
+                            </form>
+                        </th>
+                        <th scope="col">
+                            <a href="{{ $urls['orderYear'] }}">{{ __('Year Car') }}</a>
+                            <form method="get" action="{{ route('home', $dataGet) }}">
+                                <input type="text" name="year" value="@if(isset($dataGet['year'])){{ $dataGet['year'] }}@endif">
+                            </form>
+                        </th>
                         <th scope="col">{{ __('Category') }}</th>
-                        <th scope="col">{{ __('Options') }}</th>
+                        <th scope="col">
+                            <ul class="nav justify-content-end">
+                                <li class="nav-item">
+                                    <span class="nav-link active">
+                                        {{ __('Options') }}
+                                    </span>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('home') }}">{{ __('Reset filter') }}</a>
+                                </li>
+                            </ul>
+                        </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -164,6 +185,7 @@
                         @endforeach
                       </tbody>
                     </table>
+                        {{ $cars->withQueryString()->links() }}
                     </div>
                     <div class="category">
                     <form method="POST" action="{{ route('categiry') }}">
